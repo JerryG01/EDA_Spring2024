@@ -3,6 +3,8 @@ title: 'A06 - Crafting Reports'
 author: "Xuancheng Guo" 
 date: "Spring 2024"
 output: pdf_document
+html_document: 
+toc: TRUE
 ---
 
 ## Objectives:
