@@ -41,12 +41,12 @@ The expression function can be used when you want to add mathematical symbols an
 
 #Create a plot
 Plot_text <-
-ggplot(data=data.frame(x=0,y=0))+
+ggplot(data=data.frame(x=0,y=0)) +
   geom_point(aes(x=x,y=y)) +
   geom_text(
     x=0,
     y=0.025,
-    label=expression(paste("Mean is ", mu,",", R^{2},'=0.6'))
+    label=expression(paste("Mean is ", mu,", ", R^{2},'=0.6'))
     )
 
 #Print the plot
@@ -93,15 +93,21 @@ Say we want to plot the number of records each month in the Peter/Paul lakes dat
 
 ```{r Plot the number of records by month}
 #What kind of values are months?
-
+class(PeterPaul.chem.nutrients$month)
 #List unique values
-
+unique(PeterPaul.chem.nutrients$month)
 #Plot how many Lake observations occur each month
-
+ggplot(PeterPaul.chem.nutrients, aes(x = month)) + 
+    geom_bar()
 #Convert month to a factor -- with 12 levels, labelled with month names
-
+PeterPaul.chem.nutrients$month_f <- factor(
+  PeterPaul.chem.nutrients$month,
+  levels = 1:12,
+  labels = month.abb)
 #Try again: Plot how many Lake observations occur each month
-
+ggplot(PeterPaul.chem.nutrients, aes(x = month_f)) + 
+  geom_bar() + 
+  scale_x_discrete(drop = FALSE)
 #Alter to include missing months
 
 #Tidy up the code
@@ -130,17 +136,15 @@ Resource:
 ```{r More on themes}
 #Create a base plot to play with
 surface_temp_1999_plot <- PeterPaul.chem.nutrients %>% 
-  filter(depth == 0 & year4 == 1999) %>% 
+  filter(depth == 0 & year4 == 1999) %>%
   ggplot(
-    mapping = aes(
+     aes(
       x=sampledate,
       y=temperature_C,
       color=lakename)
     ) + 
   geom_line()
-
-#Show the basic plot
-surface_temp_1999_plot
+print(surface_temp_1999_plot)
 
 #Apply a theme
 surface_temp_1999_plot + 
@@ -228,8 +232,13 @@ Exercise: build your own scatterplots of PeterPaul.chem.nutrients
 # Plot surface temperatures by day of  year. 
 # Color your points by year, and facet by lake in two rows.
 # Change the ylab name
-
-
+# We are doing coding by "Pipe"
+PeterPaul.chem.nutrients %>%
+  filter(depth == 0) %>%
+  ggplot(
+    aes(x = daynum, y = temperature_C, color = year4)) + 
+  geom_point(alpha = 0.5) + # Alpha is the transparency of the plot
+  facet_wrap()
 #2. 
 # Plot temperature by date. Color your points by depth.
 # Change the size of your point to 0.5
